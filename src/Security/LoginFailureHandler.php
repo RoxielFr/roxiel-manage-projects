@@ -1,35 +1,30 @@
 <?php
 
+// src/Security/LoginFailureHandler.php
+
 namespace App\Security;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
-use Twig\Environment;
-
 class LoginFailureHandler implements AuthenticationFailureHandlerInterface
 {
     private $router;
-    private $twig;
 
-    public function __construct(RouterInterface $router, Environment $twig)
+    public function __construct(RouterInterface $router)
     {
         $this->router = $router;
-        $this->twig = $twig;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        // Customize your redirection here
-        $url = $this->router->generate('login');
+        // Rediriger l'utilisateur vers la page de connexion avec un message d'erreur
+        $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
 
-        $content = $this->twig->render('security/login.html.twig', [
-            'last_username' => $request->get('_username'),
-            'error' => $exception->getMessage(),
-        ]);
-
-        return new Response($content, 401);
+        return new RedirectResponse($this->router->generate('login'));
     }
 }

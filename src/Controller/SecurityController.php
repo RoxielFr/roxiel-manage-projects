@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -24,11 +23,4 @@ class SecurityController extends AbstractController
         ]);
     }
 
-
-    public function logout()
-    {
-        // The code in this method is never executed. Instead, Symfony intercepts
-        // the logout request and handles it automatically based on the logout
-        // configuration you have defined in security.yaml.
-    }
 }
