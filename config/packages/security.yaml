@@ -1,0 +1,24 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        main:
+            pattern: ^/
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                default_target_path: app_home_index
+            logout:
+                path: app_logout
+                target: app_home_index
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
